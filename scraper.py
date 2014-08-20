@@ -7,6 +7,7 @@ BASE_URL = "https://www.qtegov.com/"
 
 def make_soup(url):
     html = urlopen(url).read()
+    print html
     return BeautifulSoup(html, "lxml")
     
     
