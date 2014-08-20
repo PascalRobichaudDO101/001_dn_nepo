@@ -17,9 +17,8 @@ def get_tender_links(source_url):
     cells = soup.findAll('td')
     
     for cell in cells:
-        print cell
-        
-#       link = cell.a['href']
+        link = cell.a["href"]
+        print link
         
 #    tender_links = [BASE_URL + td.a["href"] for td in section.findAll("td")]
     return tender_links
