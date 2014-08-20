@@ -14,11 +14,12 @@ def get_tender_links(source_url):
     soup = make_soup(source_url)
     section = soup.find("div", "plannerSearch")
 
-    cells = soup.findAll('td')
+    links = section.findAll('a',{'title':'View opportunity'})
+    print links
     
-    for cell in cells:
-        link = cell.a["href"]
-        print link
+#    for cell in cells:
+#        link = cell.a["href"]
+#        print link
         
 #    tender_links = [BASE_URL + td.a["href"] for td in section.findAll("td")]
     return tender_links
