@@ -7,19 +7,18 @@ BASE_URL = "https://www.qtegov.com/"
 
 def make_soup(url):
     html = urlopen(url).read()
-    print html
     return BeautifulSoup(html, "lxml")
     
     
 def get_tender_links(source_url):
-    make_soup(source_url)
+    soup = make_soup(source_url)
     section = soup.find("div", "plannerSearch")
     tender_links = [BASE_URL + td.a["href"] for td in section.findAll("td")]
     return tender_links
 
 
 def get_tender_details(tender_url):
-    make_soup(tender_url)
+    soup = make_soup(tender_url)
     buyer = BeautifulSoup(text).find("dt",text="Buyer:").parent.findNextSiblings("dd")
     title = BeautifulSoup(text).find("dt",text="Title:").parent.findNextSiblings("dd")
     summary = BeautifulSoup(text).find("dt",text="Summary:").parent.findNextSiblings("dd")
