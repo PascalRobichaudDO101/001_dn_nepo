@@ -1,23 +1,45 @@
-# This is a template for a Python scraper on Morph (https://morph.io)
-# including some code snippets below that you should find helpful
 
-# import scraperwiki
-# import lxml.html
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-#
-# # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
+from bs4 import BeautifulSoup
+from urllib2 import urlopen
 
-# You don't have to do things with the ScraperWiki and lxml libraries. You can use whatever libraries are installed
-# on Morph for Python (https://github.com/openaustralia/morph-docker-python/blob/master/pip_requirements.txt) and all that matters
-# is that your final data is written to an Sqlite database called data.sqlite in the current working directory which
-# has at least a table called data.
+BASE_URL = "https://www.qtegov.com/"
+
+
+def make_soup(url):
+    html = urlopen(url).read()
+    return BeautifulSoup(html, "lxml")
+    
+    
+def get_tender_links(source_url):
+    make_soup(source_url)
+    section = soup.find("div", "plannerSearch")
+    tender_links = [BASE_URL + td.a["href"] for td in section.findAll("td")]
+    return tender_links
+
+
+def get_tender_details(tender_url):
+    make_soup(tender_url)
+    buyer = BeautifulSoup(text).find("dt",text="Buyer:").parent.findNextSiblings("dd")
+    title = BeautifulSoup(text).find("dt",text="Title:").parent.findNextSiblings("dd")
+    summary = BeautifulSoup(text).find("dt",text="Summary:").parent.findNextSiblings("dd")
+    return {"buyer": buyer,
+            "title": title,
+            "tender_url": tender_url,
+            "summary": summary}
+
+
+if __name__ == '__main__':
+    source_url = ("https://www.qtegov.com/procontract/supplier.nsf/frm_planner_search_results?OpenForm&contains=&cats=&order_by=DATE&all_opps=CHECK&org_id=ALL")
+
+    tenders = get_tender_links(source_url)
+ 
+    data = [] # a list to store our dictionaries
+    for tender in tenders:
+        buyer = get_tender_details(tender)
+        data.append(tender)
+        sleep(1) # be nice
+ 
+    print data
+
+#    runners_up = [h2.string for h2 in soup.findAll("h2", "boc2")]
+
