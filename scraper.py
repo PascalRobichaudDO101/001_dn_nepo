@@ -17,7 +17,7 @@ def get_tender_links(source_url):
     atags = section.findAll('a',{'title':'View opportunity'})
     
     for atag in atags:
-        link = atag.a["href"] # this is the bit that's causing the problem, for some reason bs can't extract the href element
+        link = atag.a['href'] # this is the bit thats causing the problem, for some reason bs cant extract the href element
         print link
         
 #    tender_links = [BASE_URL + td.a["href"] for td in section.findAll("td")]
